@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import './FormValidation.scss';
 import validationSchema from './ValidationSchema.js';
@@ -7,18 +7,18 @@ import MySelect from './MySelect';
 
 const FormValidation = () => {
   const [submittedValues, setSubmittedValues] = useState([]);
+  useEffect(() => {
+    console.log(submittedValues);
+  }, [submittedValues]);
 
   return (
     <>
       <Formik
         initialValues={{ firstName: '', lastName: '', email: '', designation: '' }}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmittedValues((prevValues) => [...prevValues, values]);
-            console.log(submittedValues);
-            setSubmitting(false);
-          }, 400);
+        onSubmit={(values, { resetForm }) => {
+          setSubmittedValues((prevValues) => [...prevValues, values]);
+          resetForm();
         }}
       >
         <Form>
@@ -44,7 +44,7 @@ const FormValidation = () => {
               placeholder="example@gmail.com"
               title="Email Address" />
 
-            <MySelect/>
+            <MySelect />
             <button type="submit">Submit</button>
           </div>
         </Form>
